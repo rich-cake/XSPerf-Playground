@@ -29,17 +29,18 @@ class elfutils:
         self.symbol_table = None
         self.function_addr_index = None
         self.bb_cache = dict()
-        if not objdump:
-            if shutil.which("riscv64-unknown-linux-gnu-objdump"):
-                self.objdump = "riscv64-unknown-linux-gnu-objdump"
-            if shutil.which("riscv64-linux-gnu-objdump"):
-                self.objdump = "riscv64-linux-gnu-objdump"
-            elif shutil.which("riscv64-unknown-elf-objdump"):
-                self.objdump = "riscv64-unknown-elf-objdump"
-            elif shutil.which("riscv64-elf-objdump"):
-                self.objdump = "riscv64-elf-objdump"
-            else:
-                raise FileNotFoundError("No riscv64 objdump found in PATH")
+        if objdump:
+            self.objdump = objdump
+        elif shutil.which("riscv64-unknown-linux-gnu-objdump"):
+            self.objdump = "riscv64-unknown-linux-gnu-objdump"
+        elif shutil.which("riscv64-linux-gnu-objdump"):
+            self.objdump = "riscv64-linux-gnu-objdump"
+        elif shutil.which("riscv64-unknown-elf-objdump"):
+            self.objdump = "riscv64-unknown-elf-objdump"
+        elif shutil.which("riscv64-elf-objdump"):
+            self.objdump = "riscv64-elf-objdump"
+        else:
+            raise FileNotFoundError("No riscv64 objdump found in PATH")
 
     def get_symbol_table(self) -> list[symbolTableEntry] | None:
         if self.symbol_table:
